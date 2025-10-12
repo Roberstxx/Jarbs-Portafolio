@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* YARP Solutions Brand Colors */
+    --background: 0 0% 6%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 170 100% 37%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 9% 65%;
+    --muted-foreground: 0 0% 88%;
+
+    --accent: 170 100% 37%;
+    --accent-foreground: 0 0% 6%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 170 100% 37%;
+
+    --radius: 1rem;
+
+    /* Custom Brand Tokens */
+    --surface-light: 210 20% 98%;
+    --text-secondary: 0 0% 88%;
+    
+    /* Gradients */
+    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(170 100% 37% / 0.12), transparent 60%);
+    --gradient-accent: linear-gradient(135deg, hsl(170 100% 37%), hsl(170 100% 30%));
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 6%), hsl(0 0% 8%));
+    
+    /* Shadows */
+    --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.35);
+    --shadow-lift: 0 12px 32px rgba(0, 191, 166, 0.15);
+    --shadow-glow: 0 0 40px hsl(170 100% 37% / 0.3);
+  }
+
+  /* Light mode for specific sections */
+  .light-section {
+    --background: 210 20% 98%;
+    --foreground: 0 0% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 6%;
+    --border: 0 0% 90%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+  }
+
+  /* ✅ SOLUCIÓN DEFINITIVA DE SCROLL JUMP (Problema de Radix UI/shadcn) */
+  html {
+    scroll-behavior: smooth;
+    /* 🛑 IMPORTANTE: Eliminamos 'overflow-y: scroll !important' para evitar la doble barra. */
+    overflow-x: hidden !important; 
+    /* Esta regla reserva el espacio del scrollbar para que la página no cambie de ancho. */
+    scrollbar-gutter: stable both-edges !important; 
+  }
+
+  body {
+    /* Mantenemos las propiedades de Tailwind y solo aseguramos el overflow-x */
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow-x: hidden !important; 
+  }
+  
+  /* 🛑 Anula el padding-right de compensación que Radix añade al ocultar el scroll */
+  body[style*="overflow: hidden"] {
+    padding-right: 0px !important;
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  .animate-fade-up {
+    animation: fade-up 0.7s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Hover lift */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Glass effect */
+  .glass {
+    background: rgba(15, 15, 15, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Custom border radius */
+ 
+  .heading-fix {
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+    font-variant-ligatures: none;
+  }
+  @layer utilities {
+  .heading-balance { text-wrap: balance; } /* mejor salto en 2 líneas */
+}
+
+}
+
+
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+@layer utilities {
+  /* Fix para Select de shadcn */
+  [data-radix-popper-content-wrapper] {
+    position: fixed !important;
+    z-index: 9999 !important;
+  }
+  
+  .radix-select-content {
+    transform-origin: var(--radix-select-content-transform-origin) !important;
+  }
+}
