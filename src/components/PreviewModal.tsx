@@ -13,7 +13,7 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
   const [failed, setFailed] = useState(false);
   const frameRef = useRef<HTMLIFrameElement | null>(null);
 
-  // Bloquea scroll y habilita cierre con ESC
+  // Bloquea scroll del fondo y cierre con ESC
   useEffect(() => {
     if (!open) return;
     const prevHtmlOverflow = document.documentElement.style.overflow;
@@ -33,14 +33,14 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
     };
   }, [open, onClose]);
 
-  // Timeout de carga más generoso (evita falso negativo)
+  // Timeout de carga (12s) para evitar falsos negativos
   useEffect(() => {
     if (!open) return;
     setLoaded(false);
     setFailed(false);
     const t = setTimeout(() => {
       if (!loaded) setFailed(true);
-    }, 8000); // antes 3500ms
+    }, 12000);
     return () => clearTimeout(t);
   }, [open, url, loaded]);
 
@@ -49,16 +49,17 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
   const handleRetry = () => {
     setFailed(false);
     setLoaded(false);
-    // recarga del iframe
+
+    // Reintento: recarga el iframe; si es cross-origin, fuerza reinyección del src
     try {
       frameRef.current?.contentWindow?.location.reload();
     } catch {
-      // si es cross-origin, forzamos src de nuevo
       if (frameRef.current) {
         const src = frameRef.current.src;
         frameRef.current.src = "about:blank";
-        // pequeño delay para reinyectar
-        setTimeout(() => (frameRef.current ? (frameRef.current.src = src) : null), 30);
+        setTimeout(() => {
+          if (frameRef.current) frameRef.current.src = src;
+        }, 40);
       }
     }
   };
@@ -128,11 +129,10 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
             <iframe
               ref={frameRef}
               title={title}
-              src={url}
+              src={url}                       // Asegúrate de usar: https://jadaburger.com/
               className="w-full h-full bg-white"
-              loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              // importante: no usar sandbox aquí para no bloquear sites externos
+              // Importante: NO usar sandbox para no bloquear permisos del sitio externo
               onLoad={() => setLoaded(true)}
             />
           )}
