@@ -27,7 +27,7 @@ const demos: Demo[] = [
   {
     title: "Tienda — Boutique Luna",
     image: demoBoutique,
-    url: "https://country-quiz-pink.vercel.app/quiz",
+    url: "https://world-navy-phi.vercel.app/",
   },
 ];
 
@@ -127,6 +127,7 @@ const Demos = () => {
 };
 
 export default Demos;
+
 
 
 
