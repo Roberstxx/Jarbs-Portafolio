@@ -16,7 +16,7 @@ const demos: Demo[] = [
   {
     title: "Restaurante — Jada Burger",
     image: demoRestaurant,
-    url: "https://jadas-burger.vercel.app/",
+    url: "https://jadaburger.com/",
   },
   {
     title: "Cafetería — Aroma Café",
@@ -126,3 +126,4 @@ const Demos = () => {
 };
 
 export default Demos;
+
