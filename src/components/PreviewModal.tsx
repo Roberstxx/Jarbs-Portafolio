@@ -33,7 +33,7 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
     };
   }, [open, onClose]);
 
-  // Timeout de carga (12s) para evitar falsos negativos
+  // Timeout de carga (12s)
   useEffect(() => {
     if (!open) return;
     setLoaded(false);
@@ -44,13 +44,24 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
     return () => clearTimeout(t);
   }, [open, url, loaded]);
 
+  // Intenta hacer scroll al inicio del iframe cuando carga
+  const handleIframeLoad = () => {
+    setLoaded(true);
+    try {
+      // Intenta hacer scroll al inicio si el iframe lo permite
+      frameRef.current?.contentWindow?.scrollTo(0, 0);
+    } catch (e) {
+      // Cross-origin, no se puede controlar
+      console.log('No se puede controlar scroll del iframe (cross-origin)');
+    }
+  };
+
   if (!open) return null;
 
   const handleRetry = () => {
     setFailed(false);
     setLoaded(false);
 
-    // Reintento: recarga el iframe; si es cross-origin, fuerza reinyección del src
     try {
       frameRef.current?.contentWindow?.location.reload();
     } catch {
@@ -65,39 +76,40 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
-      {/* Contenedor */}
+      
+      {/* Contenedor Modal - AJUSTADO PARA MAXIMIZAR ALTURA */}
       <div
         role="dialog"
         aria-modal="true"
         aria-label={`Vista previa: ${title}`}
-        className="relative z-[61] w-[min(96vw,1200px)] h-[min(90vh,900px)] rounded-2xl overflow-hidden bg-white shadow-2xl"
+        className="relative z-[61] w-full max-w-7xl h-[95vh] rounded-2xl overflow-hidden bg-white shadow-2xl flex flex-col"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 md:px-6 h-14 border-b border-[hsl(0_0%_90%)]">
-          <div className="font-heading font-semibold truncate text-[hsl(0_0%_6%)]">
+        {/* Header - MÁS COMPACTO */}
+        <div className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-gray-200 flex-shrink-0">
+          <div className="font-heading font-semibold truncate text-gray-900 text-sm md:text-base">
             {title}
           </div>
           <button
             onClick={onClose}
             aria-label="Cerrar"
-            className="p-2 rounded-lg hover:bg-black/5 btn-anim"
+            className="p-2 rounded-lg hover:bg-black/5 transition-colors"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Contenido */}
-        <div className="relative w-full h-[calc(100%-56px)] bg-white">
+        {/* Contenido - USA FLEX-1 PARA OCUPAR TODO EL ESPACIO */}
+        <div className="relative flex-1 bg-white overflow-hidden">
           {!loaded && !failed && (
             <div className="absolute inset-0 grid place-items-center">
-              <div className="animate-pulse text-[hsl(0_0%_35%)]">
+              <div className="animate-pulse text-gray-600">
                 Cargando vista previa…
               </div>
             </div>
@@ -105,7 +117,7 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
 
           {failed ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 p-6 text-center">
-              <p className="text-[hsl(0_0%_35%)]">
+              <p className="text-gray-600">
                 Esta demo no permite ser embebida en un iframe.
               </p>
               <div className="flex gap-3">
@@ -113,13 +125,13 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-2xl bg-black text-white font-semibold hover:bg-black/85 btn-anim white-glow"
+                  className="inline-flex items-center justify-center px-5 py-3 rounded-2xl bg-black text-white font-semibold hover:bg-black/85 transition-all"
                 >
-                  Abrir en Vercel
+                  Abrir en nueva pestaña
                 </a>
                 <button
                   onClick={handleRetry}
-                  className="inline-flex items-center justify-center px-5 py-3 rounded-2xl border border-black/60 text-black hover:bg-black/6 btn-anim"
+                  className="inline-flex items-center justify-center px-5 py-3 rounded-2xl border border-black/60 text-black hover:bg-black/6 transition-all"
                 >
                   Reintentar
                 </button>
@@ -129,11 +141,17 @@ const PreviewModal = ({ open, onClose, title, url }: PreviewModalProps) => {
             <iframe
               ref={frameRef}
               title={title}
-              src={url}                       // Asegúrate de usar: https://jadaburger.com/
-              className="w-full h-full bg-white"
+              src={url}
+              className="w-full h-full border-0"
               referrerPolicy="no-referrer-when-downgrade"
-              // Importante: NO usar sandbox para no bloquear permisos del sitio externo
-              onLoad={() => setLoaded(true)}
+              onLoad={handleIframeLoad}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+              }}
             />
           )}
         </div>
