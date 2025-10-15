@@ -9,7 +9,7 @@ import demoBoutique from "@/assets/demo-boutique.png";
 type Demo = {
   title: string;
   image: string;
-  url: string;   // URL pública en Vercel (o donde lo tengas)
+  url: string;
 };
 
 const demos: Demo[] = [
@@ -40,8 +40,12 @@ const Demos = () => {
   };
 
   return (
-    <section id="demos" className="py-24 px-6 bg-[hsl(var(--surface-light))] text-[hsl(0_0%_6%)]">
+    <section
+      id="demos"
+      className="py-24 px-6 bg-[hsl(var(--surface-light))] text-[hsl(0_0%_6%)]"
+    >
       <div className="max-w-container mx-auto">
+        {/* Encabezado */}
         <div className="text-center mb-16 animate-fade-up">
           <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-[hsl(0_0%_6%)]">
             Previsualiza nuestras webs
@@ -51,6 +55,7 @@ const Demos = () => {
           </p>
         </div>
 
+        {/* Tarjetas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {demos.map((demo, index) => (
             <div
@@ -58,6 +63,7 @@ const Demos = () => {
               className="group relative rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-300 animate-scale-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
+              {/* Imagen */}
               <div className="aspect-video overflow-hidden">
                 <img
                   src={demo.image}
@@ -66,6 +72,7 @@ const Demos = () => {
                 />
               </div>
 
+              {/* Contenido */}
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-heading text-lg font-semibold text-[hsl(0_0%_6%)]">
@@ -74,22 +81,28 @@ const Demos = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
+                  {/* === BOTÓN PRINCIPAL: NEGRO, LETRAS BLANCAS, CON BRILLO === */}
                   <Button
                     onClick={() => openPreview(demo)}
-                    className="rounded-2xl font-semibold px-4"
+                    className="rounded-2xl font-semibold px-4 btn-dark btn-anim white-glow"
                   >
                     <Eye size={18} className="mr-2" />
                     Vista previa
                   </Button>
 
+                  {/* === BOTÓN SECUNDARIO: OUTLINE NEGRO CON ANIMACIÓN === */}
                   <Button
                     asChild
                     variant="outline"
-                    className="rounded-2xl font-semibold px-4 border-[hsl(0_0%_80%)]"
+                    className="rounded-2xl font-semibold px-4 btn-outline-dark btn-anim"
                   >
-                    <a href={demo.url} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={demo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <ExternalLink size={18} className="mr-2" />
-                      Abrir en Vercel
+                      Ver pagina completa
                     </a>
                   </Button>
                 </div>
