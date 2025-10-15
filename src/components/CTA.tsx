@@ -6,16 +6,14 @@ const CTA = () => {
     <section
       id="cta"
       className="py-24 px-6 relative overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, hsl(170 100% 37%), hsl(170 100% 30%))",
-      }}
+      style={{ background: "linear-gradient(135deg, hsl(0 0% 12%), hsl(0 0% 0%))" }}
     >
       <div className="max-w-container mx-auto text-center relative z-10">
         <div className="animate-fade-up">
-          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-[hsl(0_0%_6%)]">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-white">
             Aumenta tus ventas con nosotros
           </h2>
-          <p className="text-xl text-[hsl(0_0%_6%)]/80 mb-12 max-w-2xl mx-auto">
+          <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
             Tu competencia ya está en línea. Empieza hoy con Jarbs Solutions.
           </p>
 
@@ -23,7 +21,7 @@ const CTA = () => {
             <Button
               asChild
               size="lg"
-              className="rounded-2xl font-semibold text-base px-8 py-6 bg-[hsl(0_0%_6%)] hover:bg-[hsl(0_0%_12%)] text-white"
+              className="rounded-2xl font-semibold text-base px-8 py-6 bg-white text-black hover:bg-white/90"
             >
               <a href="#contacto">Cotizar ahora</a>
             </Button>
@@ -31,7 +29,7 @@ const CTA = () => {
               asChild
               variant="outline"
               size="lg"
-              className="rounded-2xl font-semibold text-base px-8 py-6 border-[hsl(0_0%_6%)]/20 text-[hsl(0_0%_6%)] hover:bg-[hsl(0_0%_6%)]/10"
+              className="rounded-2xl font-semibold text-base px-8 py-6 border-white/30 text-white hover:bg-white/10"
             >
               <a href="https://wa.me/52XXXXXXXXXX" target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="mr-2" size={20} />
