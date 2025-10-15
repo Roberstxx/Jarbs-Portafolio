@@ -37,7 +37,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <div className="text-sm text-muted-foreground">
-            © {currentYear} YARP Solutions. Todos los derechos reservados.
+            © {currentYear} JARBS Solutions. Todos los derechos reservados.
           </div>
         </div>
       </div>
@@ -46,4 +46,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
